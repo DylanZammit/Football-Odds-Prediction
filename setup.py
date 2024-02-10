@@ -7,6 +7,5 @@ setup(
     author_email='dylanzam@gmail.com',
     description='Used to model pre-match and live football odds',
     url='https://github.com/DylanZammit/Football-Odds-Prediction',
-    packages=['football_odds'],
-    # packages=find_packages(__file__),
+    packages=find_packages(),
 )
