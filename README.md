@@ -63,7 +63,7 @@ dp_copy = load(model_pkl)
 
 The `MarketOdds` class will provide the probabilities of the markets of match given the scores of the home/away teams. Below is a snippet of how this can be used.
 ```python
-from football_odds.utils.odds_compiler import MarketOdds
+from football_odds.odds_compiler import MarketOdds
 
 mo = MarketOdds(
     home_score=(1.2, 0.7),

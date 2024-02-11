@@ -6,7 +6,7 @@ Dixon - Modelling Association Football Scores and Inefficiencies in the Football
 from football_odds.utils import expon, decay
 from scipy.optimize import minimize, OptimizeResult
 from football_odds.utils.connectors import QuestDB
-from football_odds.utils.odds_compiler import MarketOdds
+from football_odds.odds_compiler import MarketOdds
 from functools import partial
 from itertools import chain
 import pandas as pd
