@@ -8,11 +8,11 @@
 6. [Results](#Results)
 7. [Improvements](#Improvements)
 
-## Introduction <a name="Introduction"></a>
+## Introduction <a id="Introduction"></a>
 The aim of this project is to analysis historical football results between a pool of teams, and infer winning probabilities between any pair of teams.
 
 We implement the Double Poisson model described by [Dixon and Coles (1997)](https://www.ajbuckeconbikesail.net/wkpapers/Airports/MVPoisson/soccer_betting.pdf).
-## Model Explanation <a name="Model_Explanation"></a>
+## Model Explanation <a id="Model_Explanation"></a>
 Aside from the paper linked above, I give a brief explanation of the model in [this Linkedin article](https://www.linkedin.com/pulse/ranking-epl-football-teams-dylan-zammit%3FtrackingId=MUHlwKLNTaW8LWBOGalsww%253D%253D/?trackingId=MUHlwKLNTaW8LWBOGalsww%3D%3D).
 
 Each team `i` is given an `attack` and `defence` score denoted by `a_i` and `d_i` respectively. The `home advantage` is denoted by `K`.
@@ -36,7 +36,7 @@ In order to give higher importance to recent games, an exponential decay is perf
 
 ```L(Data) = PRODUCT_ij { [ Pr(X_i=x_ij, Y_j=y_ij) ] ^ decay(t_max - t) }```
 
-## Code Structure <a name="Code_Structure"></a>
+## Code Structure <a id="Code_Structure"></a>
 To install and be able to use locally, just go to the root directory of the project, containing the `setup.py` file and run `pip install .`.
 ### Analysis
 In this folder we have notebooks with EDA and model evaluation strategies. This folder is not meant to be productionised.
@@ -107,7 +107,7 @@ One such example is
 ```http://127.0.0.1:8000/MATCH_ODDS/Arsenal/Leicester```
 
 This method hits the `DoublePoisson.test(home_team, away_team)` method, that returns a `MarketOdds` objects. This class compiles all relevant probabilities based on the attacking/defensive scores of the home/away team along with the home advantage. For this particular example, only the match outcome probabilities are relevant. 
-## Data <a name="Data"></a>
+## Data <a id="Data"></a>
 We obtain historical football results of
 * England Premier League
 * from season starting 2010 to 
@@ -119,7 +119,7 @@ The data was obtained from [API-FOOTBALL](https://www.api-football.com/) and is 
 * Home goals scored
 * Away goals scored
 * Fixture Date
-## Methodology <a name="Methodology"></a>
+## Methodology <a id="Methodology"></a>
 ### Cleaning
 Under `analysis/Pre-Match Analysis.ipynb`, we explore the structure and nature of the data. We first notice that some games erroneously have NULL values under the home/away goals. These are filtered out when querying.
 
@@ -151,7 +151,7 @@ In summary, the following metrics were used:
 
 In a **failed** attempt to measure concept drift we subset the test data into 31-day periods, and calculate all metrics for these periods.
 
-## Results <a name="Results"></a>
+## Results <a id="Results"></a>
 **NOTE**: Due to the nature of the Poisson model, the probability of a DRAW is lower than a win, and thus the model essentially almost never predicts a DRAW as the most likely outcome. This will skew results negatively when considering the overall weighted F1 score and accuracy.
 Below is a summary of the results
 * Overall accuracy of 52% (keeping in mind that this is a 3-class classification problem)
@@ -159,7 +159,7 @@ Below is a summary of the results
 * AUC of 62%
 * Concept drift not obvious from the plots, and further analysis is required
 
-## Improvements <a name="Improvements"></a>
+## Improvements <a id="Improvements"></a>
 * We could apply grid search over the zeta parameter to optimise the decay of old games and choose the best model.
 * Better methods to evaluation the optimal concept drift need to be researched and implemented
 * Increasing the pool of teams and thus sample size
