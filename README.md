@@ -9,7 +9,7 @@
 7. [Improvements](#Improvements)
 
 ## Introduction <a id="Introduction"></a>
-The aim of this project is to analysis historical football results between a pool of teams, and infer winning probabilities between any pair of teams.
+The aim of this project is to analyse historical football results between a pool of teams, and infer winning probabilities between any pair.
 
 We implement the Double Poisson model described by [Dixon and Coles (1997)](https://www.ajbuckeconbikesail.net/wkpapers/Airports/MVPoisson/soccer_betting.pdf).
 ## Model Explanation <a id="Model_Explanation"></a>
