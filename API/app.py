@@ -16,19 +16,26 @@ def root():
 
 
 @app.get("/MATCH_ODDS/{home_team}/{away_team}")
-def read_item(home_team: str, away_team: str):
+def read_item(home_team: str, away_team: str, fmt: str = 'odds'):
 
     try:
-        res = model.test(home_team=home_team, away_team=away_team).match_odds()
+        res = model.get_match_odds(home_team=home_team, away_team=away_team).match_odds()
     except AssertionError:
         err_msg = f'One of {home_team}, {away_team} does not exist in model'
         return {'status': -1, 'message': err_msg}
 
-    return {
-        'home': res[0],
-        'draw': res[1],
-        'away': res[2],
-    }
+    if fmt == 'odds':
+        return {
+            'home': 1 / res[0],
+            'draw': 1 / res[1],
+            'away': 1 / res[2],
+        }
+    elif fmt == 'prob':
+        return {
+            'home': res[0],
+            'draw': res[1],
+            'away': res[2],
+        }
 
 
 # Run the server

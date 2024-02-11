@@ -81,6 +81,20 @@ class DoublePoisson:
         self.df_matches = None
         self.teams = None
 
+    def get_default_args(self) -> np.array:
+        """
+        :return: a 2n+1 array of  1s where n is the number of teams. n default home scores, n default attack scores, and one home advantage score
+        """
+        attack = {team: 1 for team in self.teams}
+        defence = {team: 1 for team in self.teams}
+        home_adv = 1
+
+        x0 = np.array([x for x in chain(attack.values(), defence.values(), [home_adv])])
+
+        # equivalently
+        # return np.ones(2 * len(self.teams) + 1)
+        return x0
+
     def fit(self, data: pd.DataFrame) -> pd.DataFrame:
         """
         :param data: Input dataframe containing the columns fixture_date, home_team_name, away_team_name, goals_home, goals_away
@@ -92,11 +106,8 @@ class DoublePoisson:
 
         self.df_matches = data
         self.teams = list(set(data.home_team_name) | set(data.away_team_name))
-        attack = {team: 1 for team in self.teams}
-        defence = {team: 1 for team in self.teams}
-        home_adv = 1.2
 
-        x0 = np.array([x for x in chain(attack.values(), defence.values(), [home_adv])])
+        x0 = self.get_default_args()
 
         # To help the model not diverge, set the attack/defence bounds to a reasonable range
         bounds = [(0.01, 10)] * (len(self.teams) * 2)
@@ -107,7 +118,7 @@ class DoublePoisson:
         print('done')
         return self.format_args(res)
 
-    def test(self, home_team: str, away_team: str) -> MarketOdds:
+    def get_match_odds(self, home_team: str, away_team: str) -> MarketOdds:
         """
         :param home_team: home team name
         :param away_team: away team name
@@ -253,7 +264,7 @@ if __name__ == '__main__':
 
     expected_winner_list = []
     for i, row in df_test.iterrows():
-        mo = dp.test(row.home_team_name, row.away_team_name)
+        mo = dp.get_match_odds(row.home_team_name, row.away_team_name)
         outcomes = [row.home_team_name, 'DRAW', row.away_team_name]
         expected_winner = outcomes[np.argmax(mo.match_odds())]
         expected_winner_list.append(expected_winner)
