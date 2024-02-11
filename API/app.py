@@ -16,7 +16,7 @@ def root():
 
 
 @app.get("/MATCH_ODDS/{home_team}/{away_team}")
-def read_item(home_team: str, away_team: str, fmt: str = 'odds'):
+def match_odds(home_team: str, away_team: str, fmt: str = 'odds'):
 
     try:
         res = model.get_match_odds(home_team=home_team, away_team=away_team).match_odds()

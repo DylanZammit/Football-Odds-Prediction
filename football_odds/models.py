@@ -95,7 +95,7 @@ class DoublePoisson:
         # return np.ones(2 * len(self.teams) + 1)
         return x0
 
-    def fit(self, data: pd.DataFrame) -> pd.DataFrame:
+    def fit(self, data: pd.DataFrame) -> None:
         """
         :param data: Input dataframe containing the columns fixture_date, home_team_name, away_team_name, goals_home, goals_away
         Fit the model by maximising the likelihood based on the set of games provided
@@ -114,9 +114,9 @@ class DoublePoisson:
         bounds.append((1, 10))
 
         print('Fitting model using {} matches...'.format(len(data)), end='')
-        res = minimize(self.fun, x0, bounds=bounds, method='Powell')
+        res = minimize(self.neg_log_likelihood, x0, bounds=bounds, method='Powell')
         print('done')
-        return self.format_args(res)
+        self.format_args(res)
 
     def get_match_odds(self, home_team: str, away_team: str) -> MarketOdds:
         """
@@ -132,7 +132,7 @@ class DoublePoisson:
             home_adv=self.home_advantage,
         )
 
-    def format_args(self, res: OptimizeResult) -> pd.DataFrame:
+    def format_args(self, res: OptimizeResult) -> None:
         """
         :param res: result of scipy.optimise.minimise
         :return: parsed results in a dataframe with attack, defence and home advantage score of each team
@@ -152,9 +152,8 @@ class DoublePoisson:
         self.home_advantage = home_adv
 
         self.df_res = df_parsed
-        return df_parsed
 
-    def fun(self, *args) -> float:
+    def neg_log_likelihood(self, *args) -> float:
         """
         function to be minimised. First parse the arguments and pass to the negative log likelihood
         """

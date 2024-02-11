@@ -41,7 +41,27 @@ To install and be able to use locally, just go to the root directory of the proj
 ### Analysis
 In this folder we have notebooks with EDA and model evaluation strategies. This folder is not meant to be productionised.
 ### football_odds
-This is the main package containing the utils directory with common methods and classes. This includes the `MarketOdds` class. Below is an example snippet of how this can be used.
+This is the main package containing the utils directory with common methods and classes.
+
+The `models.py` script contains the class that will fit the model on the specified data, and return test outputs.  After training the model, we can also `save` the object as a pickle, so we can load it later for reuse.
+
+```python
+import pandas as pd
+from football_odds.models import DoublePoisson, save, load
+
+# required_columns: fixture_date, home_team_name, away_team_name, goals_home, goals_away
+df = pd.read_csv('file/containing/matches/played.csv')
+
+dp = DoublePoisson()
+dp.fit(df)
+
+model_pkl = 'path/to/model.pkl' 
+save(dp, model_pkl)
+
+dp_copy = load(model_pkl)
+```
+
+The `MarketOdds` class will provide the probabilities of the markets of match given the scores of the home/away teams. Below is a snippet of how this can be used.
 ```python
 from football_odds.utils.odds_compiler import MarketOdds
 
@@ -82,23 +102,6 @@ Over/Under 3.5: (0.15497819430361537, 0.8450218056963846)
 ```
 </details>
 
-The `models.py` script contains the class that will fit the model on the specified data, and return test outputs.  After training the model, we can also `save` the object as a pickle, so we can load it later for reuse.
-
-```python
-import pandas as pd
-from football_odds.models import DoublePoisson, save, load
-
-# required_columns: fixture_date, home_team_name, away_team_name, goals_home, goals_away
-df = pd.read_csv('file/containing/matches/played.csv')
-
-dp = DoublePoisson()
-dp.fit(df)
-
-model_pkl = 'path/to/model.pkl' 
-save(dp, model_pkl)
-
-dp_copy = load(model_pkl)
-```
 ### API
 We create a simple API with one `GET` endpoint. This endpoint is in the format of 
 ```http://127.0.0.1:8000/MATCH_ODDS/{home_team}/{away_team}```
