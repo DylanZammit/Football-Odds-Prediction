@@ -28,7 +28,6 @@ def partial_likelihood(
     :param home_adv: home advantage param
     :return: Gives the likelihood of a particular result between two teams given the parameters
     """
-    breakpoint()
     a_home, d_home = attack[x.home_team_name], defence[x.home_team_name]
     a_away, d_away = attack[x.away_team_name], defence[x.away_team_name]
     lam = a_home * d_away * home_adv
