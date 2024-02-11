@@ -3,7 +3,7 @@ This script implements the Double-Poisson Model of
 Dixon - Modelling Association Football Scores and Inefficiencies in the Football Betting Market
 """
 
-from football_odds.utils import expon, decay, save, load
+from football_odds.utils import expon, decay
 from scipy.optimize import minimize, OptimizeResult
 from football_odds.utils.connectors import QuestDB
 from football_odds.utils.odds_compiler import MarketOdds
@@ -11,6 +11,8 @@ from functools import partial
 from itertools import chain
 import pandas as pd
 import numpy as np
+import pickle
+import os
 
 
 def partial_likelihood(
@@ -160,7 +162,36 @@ class DoublePoisson:
         )
 
     def __repr__(self):
-        return self.df_res.to_string()
+        return self.df_res.sort_values('attack').to_string()
+
+
+def save(obj, model_name_pkl: str) -> None:
+    """
+    Save an object as a pickle for reuse
+    """
+    base_dir = os.path.dirname(__file__)
+    model_name_pkl = os.path.join(base_dir, model_name_pkl)
+    try:
+        with open(model_name_pkl, 'wb+') as f:
+            print(f'Saving to {model_name_pkl}...', end='', flush=True)
+            pickle.dump(obj, f)
+    except Exception as e:
+        print(f'FAILED TO SAVE: {e}')
+    else:
+        print(f'saved!')
+
+
+def load(model_name_pkl: str) -> DoublePoisson:
+    """
+    Load and return a pickle object
+    """
+    base_dir = os.path.dirname(__file__)
+    model_name_pkl = os.path.join(base_dir, model_name_pkl)
+    with open(model_name_pkl, 'rb') as f:
+        print(f'loading {model_name_pkl}...', end='', flush=True)
+        model = pickle.load(f)
+    print(f'loaded {model_name_pkl}')
+    return model
 
 
 Q = r'''
@@ -194,10 +225,12 @@ where 1=1
 '''
 
 if __name__ == '__main__':
-    fn_pkl = 'double_poisson_model.pkl'
+    pd.set_option('display.max_columns', None)
+
+    fn_pkl = 'model.pkl'
 
     fixture_date_train_from = '2021-01-01'
-    fixture_date_train_to = '2022-01-01'
+    fixture_date_train_to = '2022-12-31'
     fixture_date_test_to = '2022-03-01'
 
     leagues = ['Premier League']
@@ -218,8 +251,6 @@ if __name__ == '__main__':
 
     dp.fit(data=df_train)
 
-    print(dp)
-
     expected_winner_list = []
     for i, row in df_test.iterrows():
         mo = dp.test(row.home_team_name, row.away_team_name)
@@ -232,4 +263,7 @@ if __name__ == '__main__':
 
     save(dp, fn_pkl)
     dp = load(fn_pkl)
+
+    print(dp)
     print(dp.df_res.sort_values('attack'))
+    print(df_test)
