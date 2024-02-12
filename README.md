@@ -15,7 +15,7 @@ The aim of this project is to analyse historical football results between a pool
 
 We implement the Double Poisson model described by [Dixon and Coles (1997)](https://www.ajbuckeconbikesail.net/wkpapers/Airports/MVPoisson/soccer_betting.pdf).
 ## Model Explanation
-Aside from the paper linked above, I give a brief explanation of the model in [this LinkedIn article](https://www.linkedin.com/pulse/ranking-epl-football-teams-dylan-zammit%3FtrackingId=MUHlwKLNTaW8LWBOGalsww%253D%253D/?trackingId=MUHlwKLNTaW8LWBOGalsww%3D%3D).
+Aside from the paper linked above, I give a brief explanation of the model in [this LinkedIn article](https://www.linkedin.com/pulse/ranking-epl-football-teams-dylan-zammit%3FtrackingId=MUHlwKLNTaW8LWBOGalsww%253D%253D/?trackingId=MUHlwKLNTaW8LWBOGalsww%3D%3D) and a summary of the analysis and results in [this presentation](https://docs.google.com/presentation/d/1j8y1hKOGlMrEqEoSrzT34nIE28Eu9oUH-B-3cIoBt74/edit#slide=id.p).
 
 Each team `i` is given an `attack` and `defence` score denoted by `a_i` and `d_i` respectively. The `home advantage` is denoted by `K`.
 
