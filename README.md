@@ -9,6 +9,8 @@
 7. [Improvements](#Improvements)
 
 ## Introduction <a id="Introduction"></a>
+**Objective**: Can we predict to a reasonable accuracy who will win an encounter between two teams?
+
 The aim of this project is to analyse historical football results between a pool of teams, and infer winning probabilities between any pair.
 
 We implement the Double Poisson model described by [Dixon and Coles (1997)](https://www.ajbuckeconbikesail.net/wkpapers/Airports/MVPoisson/soccer_betting.pdf).
