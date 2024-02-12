@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from football_odds.models import load
+from football_odds.models import load, DoublePoisson
 from football_odds.utils import ROOT_DIR
 import os
 import uvicorn
@@ -15,7 +15,7 @@ def root():
     return {"message": "Hello, this is a very simple API."}
 
 
-@app.get("/MATCH_ODDS/{home_team}/{away_team}")
+@app.post("/MATCH_ODDS/{home_team}/{away_team}")
 def match_odds(home_team: str, away_team: str, fmt: str = 'odds'):
 
     try:
